@@ -29,6 +29,11 @@
             <TextBox Text="{Binding Rounds}" IsEnabled="{Binding NotRunning}"/>
             <Button Command="{Binding RunCommand}" IsEnabled="{Binding NotRunning}">Run</Button>
             <TextBox Text="{Binding Progress, StringFormat=Progress {0:F1}%}"/>
+            <UniformGrid Columns="3">
+                <Button Command="{Binding ClearAllCommand}">None</Button>
+                <Button Command="{Binding SelectAllCommand}">All</Button>
+                <Button Command="{Binding InvertAllCommand}">Invert</Button>
+            </UniformGrid>
             <ListBox ItemsSource="{Binding Players}" IsEnabled="{Binding NotRunning}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>

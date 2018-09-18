@@ -21,6 +21,9 @@ namespace WPFRockPaperScissors
             LoadPlayersCommand = new RelayCommand(LoadPlayers);
             RunCommand = new RelayCommand(RunMatches);
             ClearMessagesCommand = new RelayCommand(() => Messages.Clear());
+            ClearAllCommand= new RelayCommand(() => Select(0));
+            SelectAllCommand = new RelayCommand(() => Select(1));
+            InvertAllCommand = new RelayCommand(() => Select(2));
             CrossTable = new CrossTable();
             Messages.Add("Starting");
             if (!IsInDesignMode)
@@ -30,6 +33,21 @@ namespace WPFRockPaperScissors
         public ICommand LoadPlayersCommand { get; }
         public ICommand RunCommand{ get; }
         public ICommand ClearMessagesCommand{ get; }
+        public ICommand ClearAllCommand { get; }
+        public ICommand SelectAllCommand { get; }
+        public ICommand InvertAllCommand { get; }
+
+        void Select(int type)
+        {
+            // tpye 0,1,2 = clear,set,invert
+            foreach (var p in Players)
+            {
+                if (type == 0) p.Enabled = false;
+                if (type == 1) p.Enabled = true;
+                if (type == 2) p.Enabled = !p.Enabled;
+            }
+
+        }
 
         public ObservableCollection<string> Messages { get; } = new ObservableCollection<string>();
 
@@ -125,7 +143,7 @@ namespace WPFRockPaperScissors
             set { Set(ref progress, value); }
         }
 
-        private int rounds = 500;
+        private int rounds = 1000;
         public int Rounds
         {
             get { return rounds; }

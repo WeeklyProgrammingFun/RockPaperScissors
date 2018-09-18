@@ -1,4 +1,5 @@
 using Lomont.RPSBaseLib;
+using System.Diagnostics;
 using WPFRockPaperScissors;
 
 // class to track head to head score
@@ -54,7 +55,8 @@ class HeadToHeadScore
 
     internal void Tally(Player player1, Move move1, Player player2, Move move2)
     {
-        var result = Lomont.RPSBaseLib.RockPaperScissorsLib.Score(move1, move2);
+        var result = RockPaperScissorsLib.Score(move1, move2);
+        //Debug.WriteLine($"{player1.Filename} vs {player2.Filename}: {move1}-{move2} {result}");
         if (result == Result.Player1Win)
         {
             player1Score.wins++;
