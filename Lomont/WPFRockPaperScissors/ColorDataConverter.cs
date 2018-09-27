@@ -16,10 +16,12 @@ namespace WPFRockPaperScissors
             var score = value as Score;
             if (score != null)
             {
-                
-                if (score.wins > score.losses)
+                var total = score.wins + score.losses + score.ties;
+                var gap = (int) (0.05 * total + 0.5);
+
+                if (score.wins > score.losses+gap)
                     return new SolidColorBrush(Colors.LightGreen);
-                if (score.wins < score.losses)
+                if (score.wins < score.losses-gap)
                     return new SolidColorBrush(Colors.Pink);
                 return new SolidColorBrush(Colors.Yellow);
             }

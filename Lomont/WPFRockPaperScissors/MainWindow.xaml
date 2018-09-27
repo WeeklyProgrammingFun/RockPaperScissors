@@ -48,6 +48,9 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Border BorderBrush="Black" CornerRadius="2" BorderThickness="1">
+                        <!--<Border.ToolTip>
+                            <TextBlock Text="{Binding Filename}"
+                        </Border.ToolTip>-->
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="{Binding Index,StringFormat={}{0}. }" Width="20"/>
                             <TextBlock Text="{Binding TotalScore.WinRatio, StringFormat=[{0:F3}]}" Width="50"/>
