@@ -16,45 +16,63 @@
         <vm:ViewModel/>
     </Window.DataContext>
     <DockPanel>
+        <Expander DockPanel.Dock="Bottom">
         <GroupBox DockPanel.Dock="Bottom" Height="200">
             <GroupBox.Header>
                 <TextBlock Text="{Binding Messages.Count, StringFormat=Messages({0})}"/>
             </GroupBox.Header>
             <ListBox  ItemsSource="{Binding Messages}"/>
         </GroupBox>
+        </Expander>
 
-        <StackPanel DockPanel.Dock="Left" MinWidth="200">
-            <Button Command="{Binding LoadPlayersCommand}">Load players</Button>
-            <TextBlock>Rounds:</TextBlock>
-            <TextBox Text="{Binding Rounds}" IsEnabled="{Binding NotRunning}"/>
-            <Button Command="{Binding RunCommand}" IsEnabled="{Binding NotRunning}">Run</Button>
-            <TextBox Text="{Binding Progress, StringFormat=Progress {0:F1}%}"/>
-            <UniformGrid Columns="3">
-                <Button Command="{Binding ClearAllCommand}">None</Button>
-                <Button Command="{Binding SelectAllCommand}">All</Button>
-                <Button Command="{Binding InvertAllCommand}">Invert</Button>
-            </UniformGrid>
-            <ListBox ItemsSource="{Binding Players}" IsEnabled="{Binding NotRunning}">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <CheckBox IsChecked="{Binding Path=Enabled}" Content="{Binding .}"/>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-            <Button Command="{Binding ClearMessagesCommand}" >Clear messages</Button>
 
-        </StackPanel>
+        <Expander DockPanel.Dock="Left" IsExpanded="true">
+
+            <StackPanel DockPanel.Dock="Left" MinWidth="200">
+                <Button Command="{Binding LoadPlayersCommand}">Load players</Button>
+                <TextBlock>Rounds:</TextBlock>
+                <TextBox Text="{Binding Rounds}" IsEnabled="{Binding NotRunning}"/>
+                <Button Command="{Binding RunCommand}" IsEnabled="{Binding NotRunning}">Run</Button>
+                <TextBox Text="{Binding Progress, StringFormat=Progress {0:F1}%}"/>
+                <UniformGrid Columns="3">
+                    <Button Command="{Binding ClearAllCommand}">None</Button>
+                    <Button Command="{Binding SelectAllCommand}">All</Button>
+                    <Button Command="{Binding InvertAllCommand}">Invert</Button>
+                </UniformGrid>
+                <ListBox ItemsSource="{Binding Players}" IsEnabled="{Binding NotRunning}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <CheckBox IsChecked="{Binding Path=Enabled}" Content="{Binding .}"/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <Button Command="{Binding ClearMessagesCommand}" >Clear messages</Button>
+
+            </StackPanel>
+        </Expander>
+
         <ListView ItemsSource="{Binding ScoringRows}">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Border BorderBrush="Black" CornerRadius="2" BorderThickness="1">
-                        <!--<Border.ToolTip>
-                            <TextBlock Text="{Binding Filename}"
-                        </Border.ToolTip>-->
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding Index,StringFormat={}{0}. }" Width="20"/>
-                            <TextBlock Text="{Binding TotalScore.WinRatio, StringFormat=[{0:F3}]}" Width="50"/>
-                            <TextBlock Text="{Binding Player}" Width="150"/>
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Index,StringFormat={}{0}. }" Width="20"/>
+                                    <!--<TextBlock Text="{Binding TotalScore.WinRatio, StringFormat=[{0:F3}]}" Width="50"/>-->
+                                    <TextBlock>
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="{}{0:F3} : {1}-{2}-{3}">
+                                                <Binding Path="TotalScore.WinRatio"/>
+                                                <Binding Path="TotalScore.wins"/>
+                                                <Binding Path="TotalScore.losses"/>
+                                                <Binding Path="TotalScore.ties"/>
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                </StackPanel>
+                                <TextBlock Text="{Binding Player}" Width="150"/>
+                            </StackPanel>
                             <ListView ItemsSource="{Binding OpponentScores}">
                                 <ListView.ItemsPanel>
                                     <ItemsPanelTemplate>
@@ -64,14 +82,38 @@
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
                                         <Border CornerRadius="4" BorderThickness="1" BorderBrush="DarkGray" Background="{Binding Item1, Converter={StaticResource ColorDataConverter}}" >
-                                            <UniformGrid Columns="2" Margin="3,0">
-                                                <TextBlock Width="40" Text="{Binding Item2,StringFormat=#{0}}"/>
-                                                <TextBlock Width="40" Text="{Binding Item1.WinRatio,StringFormat={}{0:F3}}"/>
-                                                <TextBlock Width="40" Text="{Binding Item1.wins,StringFormat=W:{0}}"/>
-                                                <TextBlock Width="40" Text="{Binding Item1.losses,StringFormat=L:{0}}"/>
-                                                <TextBlock Width="40" Text="" />
-                                                <TextBlock Width="40" Text="{Binding Item1.ties,StringFormat=T:{0}}" />
-                                            </UniformGrid>
+                                            <Border.ToolTip>
+                                                <TextBlock>
+                                                    <TextBlock.Text>
+                                                        <MultiBinding StringFormat="{}{0} vs {1}">
+                                                            <Binding Path="Item3"/>
+                                                            <Binding Path="Item4"/>
+                                                        </MultiBinding>
+                                                    </TextBlock.Text>
+                                                </TextBlock>
+                                            </Border.ToolTip>
+                                            <StackPanel>
+                                                <TextBlock Width="50">
+                                                    <TextBlock.Text>
+                                                        <MultiBinding StringFormat="#{0}:{1:F3}">
+                                                            <Binding Path="Item2"/>
+                                                            <Binding Path="Item1.WinRatio" />
+                                                        </MultiBinding>
+                                                    </TextBlock.Text>
+                                                </TextBlock> 
+                                                <!--<TextBlock Width="40" FontSize="10" Text="{Binding Item1.wins,StringFormat=W:{0}}"/>
+                                                <TextBlock Width="40" FontSize="10" Text="{Binding Item1.losses,StringFormat=L:{0}}"/>
+                                                <TextBlock Width="40" FontSize="10" Text="{Binding Item1.ties,StringFormat=T:{0}}" />-->
+                                                <TextBlock Width="70" FontSize="10">
+                                                    <TextBlock.Text>
+                                                        <MultiBinding StringFormat="{}{0}-{1}-{2}">
+                                                            <Binding Path="Item1.wins"/>
+                                                            <Binding Path="Item1.losses"/>
+                                                            <Binding Path="Item1.ties"/>
+                                                        </MultiBinding>
+                                                    </TextBlock.Text>                                                    
+                                                </TextBlock>
+                                            </StackPanel>
                                         </Border>
                                     </DataTemplate>
                                 </ListView.ItemTemplate>

@@ -162,8 +162,8 @@ namespace WPFRockPaperScissors
             public Player Player { get; set; }
             public Score TotalScore { get; }
 
-            // opponent score, index 1+
-            public ObservableCollection<Tuple<Score,int>> OpponentScores { get; } = new ObservableCollection<Tuple<Score,int>>();
+            // opponent score, index 1+,self,opponent
+            public ObservableCollection<Tuple<Score,int,Player,Player>> OpponentScores { get; } = new ObservableCollection<Tuple<Score,int,Player,Player>>();
         }
 
         public ObservableCollection<ScoringRow> ScoringRows { get; } = new ObservableCollection<ScoringRow>();
@@ -203,8 +203,8 @@ namespace WPFRockPaperScissors
             {
                 var player1Index = scores.FindIndex(sc => sc.Player == s.player1Score.Player);
                 var player2Index = scores.FindIndex(sc => sc.Player == s.player2Score.Player);
-                scores[player1Index].OpponentScores[player2Index] = new Tuple<Score, int>(s.player1Score, player2Index+1);
-                scores[player2Index].OpponentScores[player1Index] = new Tuple<Score, int>(s.player2Score, player1Index+1);
+                scores[player1Index].OpponentScores[player2Index] = new Tuple<Score, int, Player,Player>(s.player1Score, player2Index+1, s.player1Score.Player, s.player2Score.Player);
+                scores[player2Index].OpponentScores[player1Index] = new Tuple<Score, int, Player,Player>(s.player2Score, player1Index+1, s.player2Score.Player, s.player1Score.Player);
             }
 
             // copy out

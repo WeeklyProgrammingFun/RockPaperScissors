@@ -1,0 +1,7 @@
+TODO
+
+tell # rounds
+DONE: weed out bots
+add new dumb bots
+push up to github
+exception better - who was running
